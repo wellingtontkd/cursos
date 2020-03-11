@@ -1,2 +1,1 @@
-# cursos
-Projetos de cursos realizados como aprendizado ou melhorias nos conhecimentos de linguagens de desenvolvimento
+#Projetos de cursos realizados como aprendizado ou melhorias em desenvolvimento de softwares.
