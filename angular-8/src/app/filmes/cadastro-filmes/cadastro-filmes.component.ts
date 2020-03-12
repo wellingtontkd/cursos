@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { ValidarCamposService } from 'src/app/shared/components/campos/validar-campos.service';
 
 @Component({
   selector: 'dio-cadastro-filmes',
@@ -8,17 +9,38 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 })
 export class CadastroFilmesComponent implements OnInit {
 
-  options: FormGroup;
+  cadastro: FormGroup;
+  
+  constructor(public validacao: ValidarCamposService,
+              private fb: FormBuilder) { }
 
-  constructor(private fb: FormBuilder) { }
+  get f() {
+    return this.cadastro.controls;
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
-    this.options = this.fb.group({
-      hideRequired: false,
-      floatLabel: 'auto',
+    this.cadastro = this.fb.group({
+      titulo: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      urlFoto: ['', [Validators.minLength(10)]],
+      dataLancamento: ['', [Validators.required]],
+      descricao: [''],
+      nota: [0, [Validators.required, Validators.min(1), Validators.max(10)]],
+      urlIMDb: ['', [Validators.minLength(10)]],
+      genero: ['',[Validators.required]]
     });
+  }
 
+  salvar(): void{
+    this.cadastro.markAllAsTouched;
+    if (this.cadastro.invalid)
+      return;
+
+    alert('Salvo com Sucesso \n\n'+JSON.stringify(this.cadastro.value, null, 4))
+  }
+
+  reiniciarForm(): void{
+    this.cadastro.reset;
   }
 
 }
