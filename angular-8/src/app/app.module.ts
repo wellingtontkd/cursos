@@ -12,6 +12,7 @@ import { TopoComponent } from './shared/components/topo/topo.component';
 import { RodapeComponent } from './shared/components/rodape/rodape.component';
 
 import { FilmesModule } from './filmes/filmes.module';
+import { CamposModule } from './shared/components/campos/campos.module';
 
 
 @NgModule({
