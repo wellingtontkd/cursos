@@ -16,10 +16,15 @@ export class FilmesService {
     return this.http.post<Filme>( url, filme);
   }
 
-  listar(page, qtd: number): Observable<Filme[]> {
+  listar(page: number, qtd: number, texto: string = '', genero: string = ''): Observable<Filme[]> {
     let httpParams = new HttpParams();
     httpParams = httpParams.set('_page', page.toString());
     httpParams = httpParams.set('_limit', qtd.toString());
+    httpParams = httpParams.set('_sort', 'titulo');
+    if (texto)
+      httpParams = httpParams.set('q', texto);
+    if (genero)
+      httpParams = httpParams.set('genero',genero);
     return this.http.get<Filme[]>(url, {params: httpParams} );
   }
 

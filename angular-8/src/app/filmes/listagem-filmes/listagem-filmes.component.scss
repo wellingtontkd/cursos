@@ -10,13 +10,25 @@
   }
 }
 
+.filtro-listagem {
+  width: calc(100% - 50px);
+}
+
 .mat-card-image{
   margin: auto;
   width: auto;
   display: block;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 300px) {
+  .home-content {
+    .home-card {
+      width: calc(100% - 52px);
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
   .home-content {
     .home-card {
       width: calc(50% - 52px);
@@ -24,7 +36,7 @@
   }
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 750px) {
   .home-content {
     .home-card {
       width: calc(33% - 52px);
@@ -42,7 +54,7 @@
 @media screen and (min-width: 1440px) {
     .home-content {
       .home-card {
-        width: calc(25% - 52px);
+        width: calc(20% - 52px);
       }
     }
   }
