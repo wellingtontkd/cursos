@@ -10,10 +10,31 @@
   }
 }
 
-@media screen and (min-width: 600px) {
+.mat-card-image{
+  margin: auto;
+  width: auto;
+  display: block;
+}
+
+@media screen and (min-width: 500px) {
   .home-content {
     .home-card {
       width: calc(50% - 52px);
+    }
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .home-content {
+    .home-card {
+      width: calc(33% - 52px);
+    }
+  }
+}
+@media screen and (min-width: 900px) {
+  .home-content {
+    .home-card {
+      width: calc(25% - 52px);
     }
   }
 }
