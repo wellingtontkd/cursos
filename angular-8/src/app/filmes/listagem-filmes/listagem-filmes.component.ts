@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Filme } from 'src/app/shared/models/filme';
 import { FilmesService } from 'src/app/core/filmes.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { ConfigParams } from 'src/app/shared/models/config-params';
 
 @Component({
   selector: 'dio-listagem-filmes',
@@ -11,54 +12,56 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 export class ListagemFilmesComponent implements OnInit {
 
-  readonly limite: number = 4;
+  config: ConfigParams = {
+    pagina: 0,
+    limite: 4
+  };
   filmes: Filme[] = [];
-  pagina: number = 0;
   filtrosListagem: FormGroup;
   generos: Array<string>;
-  
-  texto : string = '';
-  genero: string = '';
-
 
   constructor(private filmesService: FilmesService,
               private formBuilder: FormBuilder) { }
 
   ngOnInit() {    
+    this.generos = ['','Ação','Aventura','Fição Cientifica', 'Drama', 'Terror', 'Comédia', 'Suspense', 'Policial', 'Romance'];
+    
     this.filtrosListagem = this.formBuilder.group({
       texto: [''],
       genero: ['']
-    });
-    this.generos = ['Ação','Aventura','Fição Cientifica', 'Drama', 'Terror', 'Comédia', 'Suspense', 'Policial', 'Romance'];
+    })
 
     this.filtrosListagem.get('texto').valueChanges.subscribe( value => {
-        this.texto = value; 
-        this.resetarFilmes();
+        this.limparFiltros().pesquisa = value;
+        this.listarFilmes();
     });
+
     this.filtrosListagem.get('genero').valueChanges.subscribe( value => {
-        this.genero = value; 
-        this.resetarFilmes();
+        this.limparFiltros().campo = 
+          value === '' ? null : {nome: 'genero', valor: value};
+        this.listarFilmes();
     });
     
     this.listarFilmes();
   }
-  
-  onScroll(): void {    
-    this.listarFilmes();
-  }
 
   private listarFilmes(): void  {
-    this.filmesService.listar(++this.pagina, this.limite, this.texto, this.genero).subscribe( 
+    this.config.pagina++;    
+    this.filmesService.listar(this.config).subscribe( 
       (listaFilmes) => this.filmes.push(...listaFilmes), 
       (error) => {
         console.log('erro ao buscar listagem: '+error) }
       );
   }  
 
-  resetarFilmes(): void {
-    this.pagina = 0;
+  limparFiltros(): ConfigParams {
+    this.config.pagina = 0;
     this.filmes = [];
-    this.listarFilmes()
+    return this.config;
+  }
+  
+  onScroll(): void {    
+    this.listarFilmes();
   }
 
   open() {
