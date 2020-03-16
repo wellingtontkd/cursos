@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 import { Filme } from 'src/app/shared/models/filme';
 import { FilmesService } from 'src/app/core/filmes.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { ConfigParams } from 'src/app/shared/models/config-params';
 
 @Component({
@@ -11,6 +12,7 @@ import { ConfigParams } from 'src/app/shared/models/config-params';
 })
 
 export class ListagemFilmesComponent implements OnInit {
+  readonly semImagem = './assets/images/sem-imagem.jpg'
 
   config: ConfigParams = {
     pagina: 0,
@@ -31,7 +33,9 @@ export class ListagemFilmesComponent implements OnInit {
       genero: ['']
     })
 
-    this.filtrosListagem.get('texto').valueChanges.subscribe( value => {
+    this.filtrosListagem.get('texto').valueChanges
+      .pipe(debounceTime(600))
+      .subscribe( value => {
         this.limparFiltros().pesquisa = value;
         this.listarFilmes();
     });
@@ -48,7 +52,10 @@ export class ListagemFilmesComponent implements OnInit {
   private listarFilmes(): void  {
     this.config.pagina++;    
     this.filmesService.listar(this.config).subscribe( 
-      (listaFilmes) => this.filmes.push(...listaFilmes), 
+      (listaFilmes) => {
+        console.log('nova consulta');
+        this.filmes.push(...listaFilmes)
+      },
       (error) => {
         console.log('erro ao buscar listagem: '+error) }
       );
